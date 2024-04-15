@@ -1,6 +1,6 @@
 # Crawler API
 
-The Crawler API is designed to fetch currency information based on ISO 4217 standard codes. This API retrieves details
+This project is a Crawler API is designed to fetch currency information based on ISO 4217 standard codes. This API retrieves details
 of various currencies by performing a crawl on an external data source using the standard's three-letter currency codes
 or numeric identifiers.
 
