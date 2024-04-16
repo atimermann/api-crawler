@@ -1,5 +1,6 @@
 <?php
 
 return [
-    App\Providers\AppCurrencyScraperServiceProvider::class,
+    App\Providers\AppServiceProvider::class,
+    App\Providers\AppCurrencyScraperServiceProvider::class
 ];
