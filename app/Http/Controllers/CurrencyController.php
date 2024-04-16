@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CurrencySearchRequest;
-use App\Services\ScraperService\CurrencyScraperService;
+use App\Services\CurrencyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -12,7 +12,7 @@ class CurrencyController extends Controller
 
 
     public function __construct(
-        protected CurrencyScraperService $currencyScraperService
+        protected CurrencyService $CurrencyService
     )
     {
     }
@@ -26,9 +26,7 @@ class CurrencyController extends Controller
     public function fetchCurrencies(CurrencySearchRequest $request): JsonResponse
     {
         $searchItems = $request->normalizedInput();
-
-        $data = $this->currencyScraperService->fetchCurrenciesByCodeOrNumber($searchItems);
-
+        $data = $this->CurrencyService->fetchCurrenciesByCodeOrNumber($searchItems);
         return response()->json($data, Response::HTTP_ACCEPTED);
     }
 }
