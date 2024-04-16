@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CurrencySearchRequest;
 use App\Services\ScraperService\CurrencyScraperService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class CurrencyController extends Controller
@@ -17,10 +17,18 @@ class CurrencyController extends Controller
     {
     }
 
-
-    public function fetchCurrencies(Request $request): JsonResponse
+    /**
+     * Handles the incoming request to fetch currencies based on ISO codes or numbers.
+     *
+     * @param CurrencySearchRequest $request The validated and normalized request.
+     * @return JsonResponse Returns the fetched currency data as a JSON response.
+     */
+    public function fetchCurrencies(CurrencySearchRequest $request): JsonResponse
     {
-        $data = $this->currencyScraperService->fetchCurrenciesByCodeOrNumber(['USD', '578']);
+        $searchItems = $request->normalizedInput();
+
+        $data = $this->currencyScraperService->fetchCurrenciesByCodeOrNumber($searchItems);
+
         return response()->json($data, Response::HTTP_ACCEPTED);
     }
 }
