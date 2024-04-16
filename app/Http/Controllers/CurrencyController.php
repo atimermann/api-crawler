@@ -20,8 +20,7 @@ class CurrencyController extends Controller
 
     public function fetchCurrencies(Request $request): JsonResponse
     {
-        $data = $this->currencyScraperService->fetchCurrenciesByCodeOrNumber(['USD', 'EUR']);
-
+        $data = $this->currencyScraperService->fetchCurrenciesByCodeOrNumber(['USD', '578']);
         return response()->json($data, Response::HTTP_ACCEPTED);
     }
 }
