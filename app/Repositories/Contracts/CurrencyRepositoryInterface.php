@@ -4,7 +4,7 @@ namespace App\Repositories\Contracts;
 
 interface CurrencyRepositoryInterface
 {
-    public function findExistingItems(array $searchItems);
+    public function getCurrenciesByCodeAndNumber(array $codeAndNumberToSearch);
 
     public function save($item);
 }
