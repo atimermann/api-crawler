@@ -120,7 +120,7 @@ class CurrencyScraperService
             'code' => $tds->eq(0)->text(),
             'number' => $tds->eq(1)->text(),
             'decimal' => $tds->eq(2)->text(),
-            'currencyName' => $tds->eq(3)->text(),
+            'name' => $tds->eq(3)->text(),
             'locations' => $this->extractLocation($tds->eq(4)),
         ];
     }
