@@ -1,0 +1,36 @@
+POST http://localhost:8000/api/currencies
+Content-Type: application/json
+Accept: application/json
+
+{
+    "code": "USD"
+}
+
+###
+POST http://localhost:8000/api/currencies
+Content-Type: application/json
+Accept: application/json
+
+{
+    "code_list": ["BRL", "EUR", "JPY"]
+}
+
+###
+POST http://localhost:8000/api/currencies
+Content-Type: application/json
+Accept: application/json
+
+{
+    "number": 950
+}
+
+###
+POST http://localhost:8000/api/currencies
+Content-Type: application/json
+Accept: application/json
+
+{
+    "number_list": [978, 826]
+}
+
+###
