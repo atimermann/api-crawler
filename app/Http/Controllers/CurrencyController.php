@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CurrencySearchRequest;
 use App\Services\CurrencyService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -22,6 +23,7 @@ class CurrencyController extends Controller
      *
      * @param CurrencySearchRequest $request The validated and normalized request.
      * @return JsonResponse Returns the fetched currency data as a JSON response.
+     * @throws Exception
      */
     public function fetchCurrencies(CurrencySearchRequest $request): JsonResponse
     {

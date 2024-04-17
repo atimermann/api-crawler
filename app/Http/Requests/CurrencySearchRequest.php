@@ -42,11 +42,10 @@ class CurrencySearchRequest extends FormRequest
      *
      * @param Validator $validator The Validator instance.
      */
-    public function withValidator($validator): void
+    public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
             $data = $this->all();
-            // Verifica se pelo menos um campo está preenchido
             if (empty($data['code']) && empty($data['code_list']) && empty($data['number']) && empty($data['number_list'])) {
                 $validator->errors()->add('fields', 'At least one field (code, code_list, number, or number_list) must be provided.');
             }
@@ -82,7 +81,7 @@ class CurrencySearchRequest extends FormRequest
         $normalized = [];
         $data = $this->all();
 
-        foreach ($data as $key => $value) {
+        foreach ($data as $value) {
             if (is_array($value)) {
                 $normalized = array_merge($normalized, array_map('strval', $value));
             } else {

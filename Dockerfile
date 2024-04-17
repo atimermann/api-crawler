@@ -4,6 +4,8 @@ FROM php:8.3-fpm
 ARG user=andre
 ARG uid=1000
 
+
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -13,6 +15,8 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip
+
+
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -27,6 +31,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
+
+# Install xdebug
+RUN pecl install xdebug
 
 # Install redis
 RUN pecl install -o -f redis \

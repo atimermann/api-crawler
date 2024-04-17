@@ -17,3 +17,6 @@ logs:
 
 rebuild:
 	@docker compose up -d --build
+
+infection:
+	@./vendor/bin/infection

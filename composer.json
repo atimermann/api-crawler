@@ -13,6 +13,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "infection/infection": "^0.28.1",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
@@ -60,7 +61,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "infection/extension-installer": true
         }
     },
     "minimum-stability": "stable",
