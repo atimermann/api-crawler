@@ -1,6 +1,7 @@
 # Crawler API
 
-This project is a Crawler API is designed to fetch currency information based on ISO 4217 standard codes. This API retrieves details
+This project is a Crawler API is designed to fetch currency information based on ISO 4217 standard codes. This API
+retrieves details
 of various currencies by performing a crawl on an external data source using the standard's three-letter currency codes
 or numeric identifiers.
 
@@ -57,6 +58,11 @@ To initialize the project, you'll need to build the Docker images and run the co
   make rebuild  
   ```
 
+- To run mutation test:
+  ```bash
+  make infection
+  ```
+
 ### Troubleshooting
 
 If you encounter any issues with Docker, refer to the official Docker documentation or check the logs
@@ -65,3 +71,8 @@ using `docker-compose logs`. This can provide insights into what might be going 
 # Additional Project Details
 
 * This project uses semantic commits: https://github.com/iuricode/padroes-de-commits
+* It utilizes Symfony BrowserKit for crawling tasks
+* Assumes that all codes and numbers are unique and not repeated; during the search, they are processed together without identifying whether it is one or the other.
+* The project uses the POST method for its endpoint to submit data for web scraping tasks due to its ability to handle
+  larger data payloads securely, non-idempotent behavior, and semantic alignment with data modification actions.
+
