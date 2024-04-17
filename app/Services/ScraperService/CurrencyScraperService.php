@@ -41,19 +41,6 @@ class CurrencyScraperService
 
     }
 
-    /**
-     * Extracts currency nodes from the DOM.
-     *
-     * @param Crawler $crawlerDom The DOM crawler instance.
-     *
-     * @return Crawler A Crawler instance containing currency rows.
-     */
-    protected function extractCurrenciesNodes(Crawler $crawlerDom): Crawler
-    {
-        return $crawlerDom
-            ->filterXPath('//*[@id="mw-content-text"]/div[1]/table[3]/tbody/tr');
-
-    }
 
     /**
      * Filters currency nodes based on provided search items.
@@ -90,21 +77,6 @@ class CurrencyScraperService
 
     }
 
-    /**
-     * Extracts the basic currency code and number from a currency node.
-     *
-     * @param Crawler $node The DOM crawler node representing a currency row.
-     *
-     * @return array An associative array containing 'code' and 'number' of the currency.
-     */
-    private function extractCurrencyCodeAndNumber(Crawler $node): array
-    {
-        $tds = $node->filter('td');
-        return [
-            'code' => $tds->eq(0)->text(),
-            'number' => $tds->eq(1)->text()
-        ];
-    }
 
     /**
      * Extracts detailed currency data from a currency node.
@@ -118,25 +90,13 @@ class CurrencyScraperService
         $tds = $node->filter('td');
         return [
             'code' => $tds->eq(0)->text(),
-            'number' => (int) $tds->eq(1)->text(),
-            'decimal' => (int) $tds->eq(2)->text(),
+            'number' => (int)$tds->eq(1)->text(),
+            'decimal' => (int)$tds->eq(2)->text(),
             'name' => $tds->eq(3)->text(),
             'locations' => $this->extractLocation($tds->eq(4)),
         ];
     }
 
-    /**
-     * Checks if the extracted currency data matches any of the search items.
-     *
-     * @param array $currencyData The currency data extracted from a node.
-     * @param array $searchItems The search items.
-     *
-     * @return bool True if a match is found, false otherwise.
-     */
-    private function matchesSearchItems(array $currencyData, array $searchItems): bool
-    {
-        return in_array($currencyData['code'], $searchItems) || in_array($currencyData['number'], $searchItems);
-    }
 
     /**
      * Extracts location information from a currency node.
@@ -174,6 +134,48 @@ class CurrencyScraperService
 
     }
 
+    /**
+     * Extracts currency nodes from the DOM.
+     *
+     * @param Crawler $crawlerDom The DOM crawler instance.
+     *
+     * @return Crawler A Crawler instance containing currency rows.
+     */
+    protected function extractCurrenciesNodes(Crawler $crawlerDom): Crawler
+    {
+        return $crawlerDom
+            ->filterXPath('//*[@id="mw-content-text"]/div[1]/table[3]/tbody/tr');
+
+    }
+
+    /**
+     * Extracts the basic currency code and number from a currency node.
+     *
+     * @param Crawler $node The DOM crawler node representing a currency row.
+     *
+     * @return array An associative array containing 'code' and 'number' of the currency.
+     */
+    private function extractCurrencyCodeAndNumber(Crawler $node): array
+    {
+        $tds = $node->filter('td');
+        return [
+            'code' => $tds->eq(0)->text(),
+            'number' => $tds->eq(1)->text()
+        ];
+    }
+
+    /**
+     * Checks if the extracted currency data matches any of the search items.
+     *
+     * @param array $currencyData The currency data extracted from a node.
+     * @param array $searchItems The search items.
+     *
+     * @return bool True if a match is found, false otherwise.
+     */
+    private function matchesSearchItems(array $currencyData, array $searchItems): bool
+    {
+        return in_array($currencyData['code'], $searchItems) || in_array($currencyData['number'], $searchItems);
+    }
 
     /**
      * Extracts and formats the location flag URL from a node.

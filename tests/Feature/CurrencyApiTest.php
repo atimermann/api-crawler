@@ -2,12 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Repositories\Contracts\CurrencyRepositoryInterface;
-use App\Services\CurrencyService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Services\ScraperService\CurrencyScraperService;
 use Illuminate\Http\Response;
-use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -18,6 +14,10 @@ class CurrencyApiTest extends TestCase
 
     use RefreshDatabase;
 
+    /**
+     * Sets up the testing environment before each test method.
+     * Mocks the CurrencyScraperService and binds it to the service container.
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -40,11 +40,17 @@ class CurrencyApiTest extends TestCase
 //                    ]
 //                ]
 //            ]);
-
-        // Substituir a instância real pela mockada no service container do Laravel
 //        $this->app->instance(CurrencyScraperService::class, $mockScraper);
     }
 
+    /**
+     * Tests the currency fetch endpoint with provided data and expects a successful response.
+     * Asserts that the API response matches the expected JSON structure.
+     *
+     * @param array $requestData The currency codes or numbers to fetch.
+     * @param array $expectedResponse The expected response structure.
+     *
+     */
     #[Test]
     #[DataProvider('currencyDataProvider')]
     public function testFetchCurrenciesEndpoint($requestData, $expectedResponse)
@@ -55,6 +61,16 @@ class CurrencyApiTest extends TestCase
         $response->assertJson($expectedResponse);
     }
 
+    /**
+     * Tests the currency fetch endpoint twice with different data sets.
+     * Verifies that the first and second responses match their expected outcomes.
+     *
+     * @param array $requestData First API request data.
+     * @param array $expectedResponse Expected response for the first API call.
+     * @param array $secondRequestData Second API request data.
+     * @param array $expectedSecondResponse Expected response for the second API call.
+     *
+     */
     #[Test]
     #[DataProvider('currencyDataProvider')]
     public function testFetchSecondCurrenciesEndpoint($requestData, $expectedResponse, $secondRequestData, $expectedSecondResponse)
@@ -70,6 +86,12 @@ class CurrencyApiTest extends TestCase
 
     }
 
+    /**
+     * Provides multiple test cases for currency API endpoint tests.
+     * Each test case array contains request data and the corresponding expected response.
+     *
+     * @return array Array of test cases for the data provider.
+     */
     static public function currencyDataProvider(): array
     {
         return [
