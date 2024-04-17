@@ -1,0 +1,197 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Swagger with Laravel",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/currencies": {
+            "post": {
+                "summary": "Fetch currency data based on ISO codes or numbers",
+                "description": "Handles the incoming request to fetch currencies based on ISO codes or numbers.",
+                "operationId": "1c3b1ac60115160d23bf5d13672440cd",
+                "requestBody": {
+                    "description": "Pass currency codes or numbers",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code_list",
+                                    "number_list"
+                                ],
+                                "properties": {
+                                    "data": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/CurrencyRequestSchema"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "examples": {
+                                "codeList": {
+                                    "summary": "An example of currency codes and numbers",
+                                    "value": {
+                                        "code_list": [
+                                            "USD",
+                                            "EUR"
+                                        ],
+                                        "number_list": [
+                                            600,
+                                            946
+                                        ],
+                                        "code": "TRY",
+                                        "number": "834"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Currency resource successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/CurrencyData"
+                                            }
+                                        },
+                                        "info": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/RequestInfo"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CurrencyRequestSchema": {
+                "properties": {
+                    "code_list": {
+                        "description": "List of ISO currency codes",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "number_list": {
+                        "description": "List of ISO currency numbers",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "code": {
+                        "description": "Single ISO currency code",
+                        "type": "string"
+                    },
+                    "number": {
+                        "description": "Single ISO currency number",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "CurrencyData": {
+                "required": [
+                    "code",
+                    "number",
+                    "decimal",
+                    "name",
+                    "locations"
+                ],
+                "properties": {
+                    "code": {
+                        "description": "ISO currency code",
+                        "type": "string"
+                    },
+                    "number": {
+                        "description": "ISO currency number",
+                        "type": "integer"
+                    },
+                    "decimal": {
+                        "description": "Number of decimal places",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Name of the currency",
+                        "type": "string"
+                    },
+                    "locations": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "name": {
+                                    "description": "Location name",
+                                    "type": "string"
+                                },
+                                "icon": {
+                                    "description": "Location flag icon URL",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "RequestInfo": {
+                "required": [
+                    "fetchFromCrawler",
+                    "fetchFromDatabase",
+                    "fetchFromCache",
+                    "length"
+                ],
+                "properties": {
+                    "fetchFromCrawler": {
+                        "description": "The total number of currencies fetched directly from the crawler.",
+                        "type": "integer"
+                    },
+                    "fetchFromDatabase": {
+                        "description": "The total number of currencies fetched from the database.",
+                        "type": "integer"
+                    },
+                    "fetchFromCache": {
+                        "description": "The total number of currencies retrieved from the cache.",
+                        "type": "integer"
+                    },
+                    "length": {
+                        "description": "The total number of currencies fetched.",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
