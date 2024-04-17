@@ -12,7 +12,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "code_list": ["BRL", "EUR", "JPY", "LVL", "LTL"]
+    "code_list": ["NZD", "OMR", "RUB"]
 }
 
 ###
@@ -21,7 +21,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "number": 950
+    "number": 600
 }
 
 ###
@@ -30,7 +30,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "code_list": ["BRL"]
+    "number_list": ["950", "446", "480"]
 }
 
 ###
