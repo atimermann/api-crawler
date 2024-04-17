@@ -27,6 +27,6 @@ class CurrencyController extends Controller
     {
         $searchItems = $request->normalizedInput();
         $data = $this->CurrencyService->fetchCurrenciesByCodeOrNumber($searchItems);
-        return response()->json($data, Response::HTTP_ACCEPTED);
+        return response()->json($data, Response::HTTP_CREATED);
     }
 }

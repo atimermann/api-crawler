@@ -49,11 +49,10 @@ class CurrencyRepository implements CurrencyRepositoryInterface
         ]);
 
 
-        // Atualiza ou cria novas localizações associadas
         foreach ($item['locations'] as $locationData) {
             $currency->locations()->create([
-                'name' => $locationData['location'],
-                'icon' => $locationData['flag']
+                'name' => $locationData['name'],
+                'icon' => $locationData['icon']
             ]);
 
         }

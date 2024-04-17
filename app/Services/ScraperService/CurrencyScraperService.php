@@ -118,8 +118,8 @@ class CurrencyScraperService
         $tds = $node->filter('td');
         return [
             'code' => $tds->eq(0)->text(),
-            'number' => $tds->eq(1)->text(),
-            'decimal' => $tds->eq(2)->text(),
+            'number' => (int) $tds->eq(1)->text(),
+            'decimal' => (int) $tds->eq(2)->text(),
             'name' => $tds->eq(3)->text(),
             'locations' => $this->extractLocation($tds->eq(4)),
         ];
@@ -161,10 +161,10 @@ class CurrencyScraperService
                 return;
             }
 
-            $locationUrl = $children->attr('title');
+            $title = $children->attr('title');
 
-            if ($locationUrl) {
-                $locations[] = ['location' => $locationUrl, 'flag' => $lastFlag];
+            if ($title) {
+                $locations[] = ['name' => $title, 'icon' => $lastFlag];
                 $lastFlag = null;
             }
 

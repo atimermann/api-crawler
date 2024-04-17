@@ -58,12 +58,13 @@ class CurrencyService
      *
      * @return array Statistics about the data sources.
      */
-    protected function createStatisticFetch($scrappingData, $existingCurrencies): array
+    protected function createStatisticFetch($existingCurrencies, $scrappingData): array
     {
         return [
             "fetchFromCrawler" => count($scrappingData),
             "fetchFromDatabase" => count($existingCurrencies),
-            "fetchFromCache" => 0
+            "fetchFromCache" => 0,
+            "length" => count($scrappingData) + count($existingCurrencies)
         ];
     }
 
