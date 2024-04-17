@@ -68,11 +68,23 @@ To initialize the project, you'll need to build the Docker images and run the co
 If you encounter any issues with Docker, refer to the official Docker documentation or check the logs
 using `docker-compose logs`. This can provide insights into what might be going wrong.
 
+# API Documentation
+
+We are using **Swagger** to document and test our API. 
+
+Swagger is a powerful tool for describing the structures of APIs
+
+To access the full documentation and interact with the API, visit the following link:
+
+[API Documentation](http://localhost:8000/api/documentation)
+
 # Additional Project Details
 
 * This project uses semantic commits: https://github.com/iuricode/padroes-de-commits
 * It utilizes Symfony BrowserKit for crawling tasks
-* Assumes that all codes and numbers are unique and not repeated; during the search, they are processed together without identifying whether it is one or the other.
+* Assumes that all codes and numbers are unique and not repeated; during the search, they are processed together without
+  identifying whether it is one or the other.
 * The project uses the POST method for its endpoint to submit data for web scraping tasks due to its ability to handle
   larger data payloads securely, non-idempotent behavior, and semantic alignment with data modification actions.
+
 
