@@ -22,7 +22,13 @@ class CurrencyRepository implements CurrencyRepositoryInterface
         return Currency::with(['locations' => function ($query) {
             $query->select('currency_id', 'name', 'icon');
         }])
-            ->select('id', 'code', 'number', 'decimal', 'name')  // Inclua 'id' para mapear corretamente os relacionamentos
+            ->select('id', 'code', 'number', 'decimal', 'name')
+            ->where(function ($query) use ($codeAndNumberToSearch) {
+                foreach ($codeAndNumberToSearch as $item) {
+                    $query->orWhere('number', (int) $item)
+                        ->orWhere('name', $item);
+                }
+            })
             ->get()
             ->toArray();
 
@@ -35,17 +41,22 @@ class CurrencyRepository implements CurrencyRepositoryInterface
      * Transactions are used to ensure all or none of the currencies are saved,
      * which includes their respective locations.
      *
-     * @param array $scrappingItems An array of scrapped currency data.
+     * @param array $crawledCurrencies An array of scrapped currency data.
      *
      * @throws Exception If an error occurs during the database transaction.
      */
-    public function saveCurrencies(array $scrappingItems): void
+    public function saveCurrencies(array $crawledCurrencies): void
     {
+
+        if (empty($crawledCurrencies)) {
+            return;
+        }
+
 
         DB::beginTransaction();
         try {
 
-            foreach ($scrappingItems as $item) {
+            foreach ($crawledCurrencies as $item) {
                 $this->save($item);
             }
             DB::commit();

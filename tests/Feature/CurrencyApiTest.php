@@ -53,7 +53,7 @@ class CurrencyApiTest extends TestCase
      */
     #[Test]
     #[DataProvider('currencyDataProvider')]
-    public function testFetchCurrenciesEndpoint($requestData, $expectedResponse)
+    public function testFetchCurrenciesEndpoint(array $requestData, array $expectedResponse)
     {
 
         $response = $this->postJson('/api/currencies', $requestData);
@@ -73,12 +73,10 @@ class CurrencyApiTest extends TestCase
      */
     #[Test]
     #[DataProvider('currencyDataProvider')]
-    public function testFetchSecondCurrenciesEndpoint($requestData, $expectedResponse, $secondRequestData, $expectedSecondResponse)
+    public function testFetchSecondCurrenciesEndpoint(array $requestData, array $expectedResponse, array $secondRequestData, array $expectedSecondResponse)
     {
 
-        $firstResponse = $this->postJson('/api/currencies', $requestData);
-        $firstResponse->assertStatus(Response::HTTP_CREATED);
-        $firstResponse->assertJson($expectedResponse);
+        $this->postJson('/api/currencies', $requestData);
 
         $secondResponse = $this->postJson('/api/currencies', $secondRequestData);
         $secondResponse->assertStatus(Response::HTTP_CREATED);
@@ -138,8 +136,8 @@ class CurrencyApiTest extends TestCase
                     ],
                     'info' => [
                         'fetchFromCrawler' => 0,
-                        'fetchFromDatabase' => 1,
-                        'fetchFromCache' => 0,
+                        'fetchFromDatabase' => 0,
+                        'fetchFromCache' => 1,
                         'length' => 1
                     ]
 
@@ -272,8 +270,8 @@ class CurrencyApiTest extends TestCase
                     ],
                     'info' => [
                         'fetchFromCrawler' => 1,
-                        'fetchFromDatabase' => 2,
-                        'fetchFromCache' => 0,
+                        'fetchFromDatabase' => 0,
+                        'fetchFromCache' => 2,
                         'length' => 3
                     ]
                 ]
@@ -326,7 +324,6 @@ class CurrencyApiTest extends TestCase
                         'length' => 1
                     ]
                 ]
-
 
             ]
 

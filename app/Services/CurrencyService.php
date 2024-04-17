@@ -5,9 +5,12 @@ namespace App\Services;
 use App\Repositories\Contracts\CurrencyRepositoryInterface;
 use App\Services\ScraperService\CurrencyScraperService;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 
 class CurrencyService
 {
+
+    private int $cacheTime = 3600;
 
     /**
      * Constructs the service with dependencies.
@@ -26,45 +29,122 @@ class CurrencyService
      * Fetches currency data by codes or numbers from crawler, database or cache
      *
      * @param array $codeAndNumberToSearch Array of currency codes and numbers to search.
+     *
      * @return array Returns an array of merged and sanitized currency data.
      * @throws Exception
      */
     public function fetchCurrenciesByCodeOrNumber(array $codeAndNumberToSearch): array
     {
 
-        $existingCurrencies = $this->currencyRepository->getCurrenciesByCodeAndNumber($codeAndNumberToSearch);
+        [$cachedCurrencies, $codeAndNumberToFetch] = $this->fetchCurrenciesByCodeOrNumberFromCache($codeAndNumberToSearch);
+        [$fetchedCurrencies, $codeAndNumberToCrawler] = $this->fetchCurrenciesByCodeOrNumberFromDatabase($codeAndNumberToFetch);
+        $crawledCurrencies = $this->fetchCurrenciesByCodeOrNumberFromCrawler($codeAndNumberToCrawler);
 
-        $existingCodeAndNumber = $this->flattenCurrencyCodeAndNumber($existingCurrencies);
-
-        $codeAndNumberToScrapping = $this->removeValuesFromArray($codeAndNumberToSearch, $existingCodeAndNumber);
-
-        $scrappingData = $this->crawlerService->fetchCurrenciesByCodeOrNumber($codeAndNumberToScrapping);
-
-        $this->currencyRepository->saveCurrencies($scrappingData);
+        $this->currencyRepository->saveCurrencies($crawledCurrencies);
+        $this->cacheFetchedCurrencies(array_merge($fetchedCurrencies, $crawledCurrencies));
 
 
         return [
-            "data" => $this->removeUnwantedFields(array_merge($existingCurrencies, $scrappingData)),
-            "info" => $this->createStatisticFetch($existingCurrencies, $scrappingData)
+            "data" => array_merge($cachedCurrencies, $fetchedCurrencies, $crawledCurrencies),
+            "info" => $this->createStatisticFetch($cachedCurrencies, $fetchedCurrencies, $crawledCurrencies)
         ];
+    }
 
+    /**
+     * Fetches currencies from cache based on specified codes or numbers.     *
+     * @param array $codeAndNumberToSearch Array of currency codes and numbers to search in cache.
+     *
+     * @return array Tuple containing cached currency data and the codes/numbers to be fetched from the database.
+     */
+    private function fetchCurrenciesByCodeOrNumberFromCache(array $codeAndNumberToSearch): array
+    {
+
+        $cachedCurrencyData = [];
+        $codeAndNumberToCrawler = [];
+
+        foreach ($codeAndNumberToSearch as $item) {
+            $cacheKey = 'currency_' . $item;
+            $cachedCurrency = Cache::get($cacheKey);
+
+            if ($cachedCurrency) {
+                $cachedCurrencyData[] = $cachedCurrency;
+            } else {
+                $codeAndNumberToCrawler[] = $item;
+            }
+        }
+        return [$cachedCurrencyData, $codeAndNumberToCrawler];
+    }
+
+
+    /**
+     * Fetches currencies from the database based on the specified codes or numbers not found in cache.
+     *
+     * @param array $codeAndNumberToFetch Array of currency codes and numbers to search in the database.
+     * @return array Tuple containing fetched currency data from database and the codes/numbers to be fetched from the crawler.
+     */
+    private function fetchCurrenciesByCodeOrNumberFromDatabase(array $codeAndNumberToFetch): array
+    {
+        if (empty($codeAndNumberToFetch)) {
+            return [[], []];
+        }
+
+        $fetchedCurrencies = $this->currencyRepository->getCurrenciesByCodeAndNumber($codeAndNumberToFetch);
+
+        $fetchedCodeAndNumber = $this->flattenCurrencyCodeAndNumber($fetchedCurrencies);
+        $codeAndNumberToCrawler = $this->removeValuesFromArray($codeAndNumberToFetch, $fetchedCodeAndNumber);
+
+        return [$this->removeUnwantedFields($fetchedCurrencies), $codeAndNumberToCrawler];
+    }
+
+
+    /**
+     * Fetches currencies from an external crawler based on specified codes or numbers not found in the database.
+     *
+     * @param array $codeAndNumberToCrawler Array of currency codes and numbers to search via crawler.
+     *
+     * @return array Array of currencies fetched from the crawler.
+     */
+    private function fetchCurrenciesByCodeOrNumberFromCrawler(array $codeAndNumberToCrawler): array
+    {
+        if (empty($codeAndNumberToCrawler)) {
+            return [];
+        }
+
+        return $this->crawlerService->fetchCurrenciesByCodeOrNumber($codeAndNumberToCrawler);
+    }
+
+    /**
+     * Caches the fetched currencies. Each currency is cached under its code and number.
+     *
+     * @param array $currencies Array of currency data to be cached.
+     */
+    private function cacheFetchedCurrencies(array $currencies): void
+    {
+
+        foreach ($currencies as $currency) {
+            $cacheKey = 'currency_' . $currency['code'];
+            Cache::put($cacheKey, $currency, $this->cacheTime);
+            $cacheKey = 'currency_' . $currency['number'];
+            Cache::put($cacheKey, $currency, $this->cacheTime);
+        }
     }
 
     /**
      * Generates statistics for data fetched from different sources.
      *
-     * @param array $scrappingData Data fetched from the crawler.
-     * @param array $existingCurrencies Data fetched from the database.
+     * @param array $cachedCurrencies Data fetched from the cache.
+     * @param array $fetchedCurrencies Data fetched from the database.
+     * @param array $crawledCurrencies Data fetched from the crawler.
      *
      * @return array Statistics about the data sources.
      */
-    protected function createStatisticFetch($existingCurrencies, $scrappingData): array
+    protected function createStatisticFetch(array $cachedCurrencies, array $fetchedCurrencies, array $crawledCurrencies): array
     {
         return [
-            "fetchFromCrawler" => count($scrappingData),
-            "fetchFromDatabase" => count($existingCurrencies),
-            "fetchFromCache" => 0,
-            "length" => count($scrappingData) + count($existingCurrencies)
+            "fetchFromCrawler" => count($crawledCurrencies),
+            "fetchFromDatabase" => count($fetchedCurrencies),
+            "fetchFromCache" => count($cachedCurrencies),
+            "length" => count($cachedCurrencies) + count($fetchedCurrencies) + count($crawledCurrencies)
         ];
     }
 
