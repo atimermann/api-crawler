@@ -7,7 +7,6 @@ up:
 down:
 	@docker compose down
 
-
 shell:
 	@echo "Entering the Docker container..."
 	@docker compose exec app bash --init-file .bashrc
@@ -20,3 +19,9 @@ rebuild:
 
 infection:
 	@./vendor/bin/infection
+
+swagger-build:
+	@php artisan l5-swagger:generate
+
+docker-deploy:
+	@./docker/prod/deploy.sh
