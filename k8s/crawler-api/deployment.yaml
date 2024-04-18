@@ -26,7 +26,7 @@ spec:
             - name: APP_ENV
               value: "production"
             - name: APP_KEY
-              value: "base64:7CKIabKncDOdjVh4FD4OIq3a57f4RsA8tpoSC7BIyNQ="
+              value: "TODO: Move to secrets"
             - name: APP_DEBUG
               value: "true"
             - name: APP_TIMEZONE
@@ -66,7 +66,7 @@ spec:
             - name: DB_USERNAME
               value: "crawler"
             - name: DB_PASSWORD
-              value: "NEW2k}w$7]r*-}D%OK,*8W)xHQK,M6T>"
+              value: "TODO: Move to secrets"
 
       restartPolicy: Always
 ---

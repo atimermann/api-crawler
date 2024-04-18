@@ -30,11 +30,38 @@ To initialize the project, you'll need to build the Docker images and run the co
    docker compose up -d
    ```
 
-2. **Accessing the Application**
+2. Create a new .env file based on .env-example and configure accordingly.
+
+3. Access the development container with the command:
+
+```bash
+    make shell
+```
+
+4. Then inside the container, execute:
+
+ ```bash
+    php artisan key:generate
+```   
+
+5. Configure the database with the command:
+
+```bash
+    php artisan migrate
+```
+**Note:** it is necessary to wait for the MySQL container to be ready, use command **make logs** to follow.
+
+6. To generate the Swagger documentation, execute:
+
+```bash
+    make swagger-build
+```
+
+7. **Accessing the Application**
     - The web server is available at `http://localhost:8000`
     - PHPMyAdmin is accessible at `http://localhost:8080`
 
-3. **Stopping the Containers**
+8. **Stopping the Containers**
    When you are done, you can stop the Docker containers with:
    ```bash
    make down   

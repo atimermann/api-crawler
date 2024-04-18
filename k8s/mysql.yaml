@@ -19,11 +19,11 @@ spec:
             - name: MYSQL_DATABASE
               value: "api_crawler"
             - name: MYSQL_ROOT_PASSWORD
-              value: "NEW2k}w$7]r*-}D%OK,*8W)xHQK,M6T>"
+              value: "TODO: Move to secrets"
             - name: MYSQL_USER
               value: "crawler"
             - name: MYSQL_PASSWORD
-              value: "NEW2k}w$7]r*-}D%OK,*8W)xHQK,M6T>"
+              value: "TODO: Move to secrets"
           ports:
             - containerPort: 3306
 
