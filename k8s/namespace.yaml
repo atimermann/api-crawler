@@ -1,0 +1,5 @@
+# Aplicações desenvolvidas pela Crontech
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: crawler-api

@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crawler-api
+  labels:
+    app: crawler-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: crawler-api
+  template:
+    metadata:
+      labels:
+        app: crawler-api
+    spec:
+      containers:
+        - name: crawler-api
+          image: registry.crontech.com.br:5000/crawler-api:latest
+          imagePullPolicy: Always
+          env:
+            - name: APP_URL
+              value: "https://crawler.timermann.com.br"
+            - name: APP_NAME
+              value: "Api Crawler"
+            - name: APP_ENV
+              value: "production"
+            - name: APP_KEY
+              value: "base64:7CKIabKncDOdjVh4FD4OIq3a57f4RsA8tpoSC7BIyNQ="
+            - name: APP_DEBUG
+              value: "true"
+            - name: APP_TIMEZONE
+              value: "America/Sao_Paulo"
+            - name: APP_LOCALE
+              value: "pt"
+            - name: APP_FALLBACK_LOCALE
+              value: "en"
+            - name: APP_FAKER_LOCALE
+              value: "pt-BR"
+            # SWAGGER =================================================================================================
+            - name: L5_SWAGGER_GENERATE_ALWAYS
+              value: "false"
+            #  REDIS ===================================================================================================
+            - name: REDIS_CLIENT
+              value: "phpredis"
+            - name: REDIS_HOST
+              value: "redis-service"
+            - name: REDIS_PASSWORD
+              value: "null"
+            - name: REDIS_PORT
+              value: "6379"
+            #  CACHE  ==================================================================================================
+            - name: CACHE_STORE
+              value: "redis"
+            - name: CACHE_PREFIX
+              value: ""
+            #  MYSQL  ==================================================================================================
+            - name: DB_CONNECTION
+              value: "mysql"
+            - name: DB_HOST
+              value: "mysql-service"
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_DATABASE
+              value: "api_crawler"
+            - name: DB_USERNAME
+              value: "crawler"
+            - name: DB_PASSWORD
+              value: "NEW2k}w$7]r*-}D%OK,*8W)xHQK,M6T>"
+
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crawler-api-svc
+spec:
+  selector:
+    app: crawler-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

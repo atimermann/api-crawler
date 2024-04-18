@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_DATABASE
+              value: "api_crawler"
+            - name: MYSQL_ROOT_PASSWORD
+              value: "NEW2k}w$7]r*-}D%OK,*8W)xHQK,M6T>"
+            - name: MYSQL_USER
+              value: "crawler"
+            - name: MYSQL_PASSWORD
+              value: "NEW2k}w$7]r*-}D%OK,*8W)xHQK,M6T>"
+          ports:
+            - containerPort: 3306
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      targetPort: 3306
+  type: ClusterIP

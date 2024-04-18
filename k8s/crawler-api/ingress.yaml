@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: crawler-api-ingress
+  annotations:
+    # Add Cert-Manager SSL certificates as the name of the ClusterIssuer resource
+    cert-manager.io/cluster-issuer: letsencrypt-certificate
+    traefik.ingress.kubernetes.io/router.middlewares: crontech-redirect@kubernetescrd
+spec:
+  ingressClassName: traefik
+  # TLS configuration for HTTPS
+  tls:
+    # TLS secretName used on ClusterIssuer
+    - secretName: crawler.letsencrypt.key.tls
+      hosts:
+        # Replace with your domain name
+        - crawler.timermann.com.br
+  rules:
+    - host: crawler.timermann.com.br
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: crawler-api-svc
+                port:
+                  number: 80
