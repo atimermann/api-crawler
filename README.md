@@ -63,6 +63,24 @@ To initialize the project, you'll need to build the Docker images and run the co
   make infection
   ```
 
+* To generate Swagger documentation:
+
+```bash
+make swagger-build
+```
+
+* To upload image Docker in production:
+
+```bash
+make docker-upload
+```
+
+* To deploy application in production using kubernetes:
+
+```bash
+make deploy
+```
+
 ### Troubleshooting
 
 If you encounter any issues with Docker, refer to the official Docker documentation or check the logs
@@ -70,13 +88,29 @@ using `docker-compose logs`. This can provide insights into what might be going 
 
 # API Documentation
 
-We are using **Swagger** to document and test our API. 
+We are using **Swagger** to document and test our API.
 
 Swagger is a powerful tool for describing the structures of APIs
 
 To access the full documentation and interact with the API, visit the following link:
 
 [API Documentation](http://localhost:8000/api/documentation)
+
+# Deployment in Kubernetes
+
+This project is deployed on a Kubernetes server, which ensures scalable and efficient handling of requests. The
+infrastructure supports automatic scaling, self-healing, and seamless updates. We have prioritized security by
+configuring SSL certificates through Let's Encrypt, providing a secure HTTPS connection for all data interactions.
+
+## Accessing the API Documentation
+
+The API documentation is securely hosted and can be accessed through the following URL:
+
+https://crawler.timermann.com.br/api/documentation
+
+### SSL
+
+The project is served over a secure HTTPS connection, utilizing Let's Encrypt certificates with automated renewal.
 
 # Additional Project Details
 
@@ -86,5 +120,6 @@ To access the full documentation and interact with the API, visit the following 
   identifying whether it is one or the other.
 * The project uses the POST method for its endpoint to submit data for web scraping tasks due to its ability to handle
   larger data payloads securely, non-idempotent behavior, and semantic alignment with data modification actions.
+
 
 

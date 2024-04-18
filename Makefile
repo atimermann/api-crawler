@@ -23,5 +23,8 @@ infection:
 swagger-build:
 	@php artisan l5-swagger:generate
 
-docker-deploy:
-	@./docker/prod/deploy.sh
+docker-upload:
+	@./docker/prod/upload-image.sh
+
+deploy:
+	@kubectl apply -k k8s/
