@@ -5,6 +5,8 @@ retrieves details
 of various currencies by performing a crawl on an external data source using the standard's three-letter currency codes
 or numeric identifiers.
 
+External Source: [ISO_4217](https://pt.wikipedia.org/wiki/ISO_4217)
+
 ## Getting Started with Docker
 
 This project utilizes Docker and Docker Compose to create an isolated and consistent development environment. Follow the
