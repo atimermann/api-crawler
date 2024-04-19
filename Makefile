@@ -28,3 +28,6 @@ docker-upload:
 
 deploy:
 	@kubectl apply -k k8s/
+
+restart-pods:
+	@kubectl delete pods --all --namespace=crawler-api
