@@ -26,7 +26,7 @@ class CurrencyRepository implements CurrencyRepositoryInterface
             ->where(function ($query) use ($codeAndNumberToSearch) {
                 foreach ($codeAndNumberToSearch as $item) {
                     $query->orWhere('number', (int) $item)
-                        ->orWhere('name', $item);
+                        ->orWhere('code', $item);
                 }
             })
             ->get()
